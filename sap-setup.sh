@@ -76,14 +76,8 @@ fi
 cd ~
 #sudo rm methuselah-1.0.1.0-linux.tar.gz
 #wget https://github.com/methuselah-coin/methuselah/releases/download/v1.0.1.0/methuselah-1.0.1.0-linux.tar.gz
-#sudo tar -xzvf methuselah-1.0.1.0-linux.tar.gz --strip-components 1 --directory /usr/bin
+#sudo tar -xzvf methuselah-1.0.1.0-linux.tar.gz --strip-components 1 
 #sudo rm methuselah-1.0.1.0-linux.tar.gz
-
-# Copy binaries to /usr/bin
-sudo cp SAPMasternodeSetup/methuselah-1.0.1.0-linux/methuselah* /usr/bin/ > /dev/null
-
-sudo chmod 755 -R ~/SAPMasternodeSetup
-sudo chmod 755 /usr/bin/methuselah*
 
 #Stop daemon if it's already running
 if pgrep -x 'methuselah' > /dev/null; then
@@ -92,7 +86,13 @@ if pgrep -x 'methuselah' > /dev/null; then
 	sleep 10
 fi
 
-#Create reden.conf
+# Copy binaries to /usr/bin
+sudo cp SAPMasternodeSetup/methuselah-1.0.1.0-linux/methuselah* /usr/bin/ > /dev/null
+
+sudo chmod 755 -R ~/SAPMasternodeSetup
+sudo chmod 755 /usr/bin/methuselah*
+
+#Create methusula.conf
 if [ ! -f ~/.methuselah/methuselah.conf ]; then 
 	sudo mkdir ~/.methuselah
 fi
@@ -243,10 +243,7 @@ bash ~/SAPMasternodeSetup/nodemon.sh
 
 Enjoy your Methuslah Masternode and thanks for using this setup script!
 
-This was ported by -dwigt- from the Reden Masternode Setup
-
-If you found it helpful, please donate REDEN to:
-RCdYg5yq3YfymwrZi8EMBSFHxcwR7acniS
+Authors:  AllroadAllroad [FasterPool.com], -Dwigt-
 
 ...and make sure to check back for updates!
 
