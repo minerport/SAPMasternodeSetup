@@ -113,7 +113,7 @@ sleep 10
 #Generate masternode private key
 echo 'Generating masternode key...'
 genkey=$(methuselah-cli masternode genkey)
-reden-cli stop
+methuselah-cli stop
 
 cat <<EOF > ~/.methuselah/methuselah.conf
 rpcuser=rpcuser
