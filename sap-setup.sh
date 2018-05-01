@@ -79,18 +79,18 @@ cd ~
 #sudo tar -xzvf methuselah-1.0.1.0-linux.tar.gz --strip-components 1 
 #sudo rm methuselah-1.0.1.0-linux.tar.gz
 
+# Copy binaries to /usr/bin
+sudo cp SAPMasternodeSetup/methuselah-1.0.1.0-linux/methuselah* /usr/bin/ > /dev/null
+
+sudo chmod 755 -R ~/SAPMasternodeSetup
+sudo chmod 755 /usr/bin/methuselah*
+
 #Stop daemon if it's already running
 if pgrep -x 'methuselah' > /dev/null; then
 	methuselah-cli stop
 	echo 'sleep for 10 seconds...'
 	sleep 10
 fi
-
-# Copy binaries to /usr/bin
-sudo cp SAPMasternodeSetup/methuselah-1.0.1.0-linux/methuselah* /usr/bin/ > /dev/null
-
-sudo chmod 755 -R ~/SAPMasternodeSetup
-sudo chmod 755 /usr/bin/methuselah*
 
 #Create methusula.conf
 if [ ! -f ~/.methuselah/methuselah.conf ]; then 
