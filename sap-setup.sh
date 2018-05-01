@@ -116,7 +116,7 @@ genkey=$(methuselah-cli masternode genkey)
 methuselah-cli stop
 
 cat <<EOF > ~/.methuselah/methuselah.conf
-rpcuser=rpcuser
+rpcuser=methusulahrpc
 rpcpassword=$rpcpassword
 rpcallowip=127.0.0.1
 listen=1
@@ -150,7 +150,7 @@ Masternode was installed with VPS IP Address: $publicip
 Masternode Private Key: $genkey
 
 Now you can add the following string to the masternode.conf file
-for your Hot Wallet (the wallet with your Reden collateral funds):
+for your Hot Wallet (the wallet with your Methuselah collateral funds):
 ======================================================================== \a"
 echo "mn1 $publicip:$Port $genkey TxId TxIdx"
 echo "========================================================================
