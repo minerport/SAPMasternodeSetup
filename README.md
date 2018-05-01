@@ -1,4 +1,4 @@
-## Methuselah Masternode Installation (reden script port)
+## Methuselah Masternode Installation
 
 **NOTE:** This installation guide is provided as is with no warranties of any kind.
 
