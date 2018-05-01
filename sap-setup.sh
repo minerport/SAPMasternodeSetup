@@ -116,7 +116,7 @@ genkey=$(methuselah-cli masternode genkey)
 methuselah-cli stop
 
 cat <<EOF > ~/.methuselah/methuselah.conf
-rpcuser=methusulahrpc
+rpcuser=methuselahrpc
 rpcpassword=$rpcpassword
 rpcallowip=127.0.0.1
 listen=1
