@@ -272,14 +272,12 @@ Press Ctrl-C to Exit...
 ```
 
 * * *
+Thank you for using the script!
 
-This script has been ported from the Reden Masternode Setup by Allroad.
+...make sure to check back for updates!
 
-If you found this script and masternode setup guide helpful...
-
-...please donate REDEN to: **RCdYg5yq3YfymwrZi8EMBSFHxcwR7acniS**
-
-or just come to our pool to mine REDEN: https://fasterpool.com
+If you feel like donating, bring your hash to https://fasterpool.com
 We have 0% fees and hourly payouts!
 
---Allroad
+
+Authors:  AllroadAllroad [FasterPool.com], -Dwigt-
