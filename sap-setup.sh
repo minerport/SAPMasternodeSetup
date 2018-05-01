@@ -25,7 +25,7 @@ else
 fi
 
 #Methuselah TCP port
-Port='7575'
+Port='7555'
 
 # update packages and upgrade Ubuntu
 sudo apt-get -y upgrade
@@ -122,7 +122,7 @@ rpcallowip=127.0.0.1
 listen=1
 server=1
 daemon=1
-maxconnections=256
+maxconnections=65
 externalip=$publicip
 masternode=1
 masternodeprivkey=$genkey
