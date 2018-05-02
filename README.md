@@ -125,9 +125,9 @@ Go back to your VPS and wait for the status of your new masternode to change to 
 Finally, to **monitor your masternode status** you can use the following commands in Linux console of your masternode VPS:
 
 ```bash
-methuselah-cli masternode status
+methuselah-cli masternode debug
 
-methuselah-cli mnsync status
+methuselah-cli masternode outputs
 ```
 
 If you are really bored waiting for the sync to complete, you can watch what your masternode is doing on the network at any time by using tail to **monitor the debug.log** file in realtime:
