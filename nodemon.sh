@@ -24,8 +24,6 @@ uptime
 echo '==========================================================================='
 echo 'Masternode Status: \n# methuselah-cli masternode debug' && methuselah-cli -datadir=$datadir masternode debug
 echo '==========================================================================='
-echo 'Sync Status: \n# methuselah-cli masternode outputs' &&  methuselah-cli -datadir=$datadir masternode outputs
-echo '==========================================================================='
 echo 'Masternode Information: \n# methuselah-cli getinfo' && methuselah-cli -datadir=$datadir getinfo
 echo '==========================================================================='
 echo 'Usage: nodemon.sh [refresh delay] [datadir index]'
