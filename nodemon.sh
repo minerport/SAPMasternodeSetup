@@ -13,8 +13,8 @@ dpkg -s jq 2>/dev/null >/dev/null || sudo apt-get -y install jq
 watch -ptn $dly "echo '===========================================================================
 Outbound connections to other Methuselah nodes [methuselah datadir: $datadir]
 ===========================================================================
-Node IP               Ping    Rx/Tx     Since  Hdrs   Height  Time   Ban
-Address               (ms)   (KBytes)   Block  Syncd  Blocks  (min)  Score
+Node IP             Ping    Rx/Tx     Since  Hdrs   Height  Time   Ban
+Address             (ms)   (KBytes)   Block  Syncd  Blocks  (min)  Score
 ==========================================================================='
 methuselah-cli -datadir=$datadir getpeerinfo | jq -r '.[] | select(.inbound==false) | \"\(.addr),\(.pingtime*1000|floor) ,\
 \(.bytesrecv/1024|floor)/\(.bytessent/1024|floor),\(.startingheight) ,\(.synced_headers) ,\(.synced_blocks)  ,\
