@@ -22,9 +22,9 @@ methuselah-cli -datadir=$datadir getpeerinfo | jq -r '.[] | select(.inbound==fal
 echo '==========================================================================='
 uptime
 echo '==========================================================================='
-echo 'Masternode Status: \n# methuselah-cli masternode status' && methuselah-cli -datadir=$datadir masternode status
+echo 'Masternode Status: \n# methuselah-cli masternode debug' && methuselah-cli -datadir=$datadir masternode debug
 echo '==========================================================================='
-echo 'Sync Status: \n# methuselah-cli mnsync status' &&  methuselah-cli -datadir=$datadir mnsync status
+echo 'Sync Status: \n# methuselah-cli masternode outputs' &&  methuselah-cli -datadir=$datadir masternode outpts
 echo '==========================================================================='
 echo 'Masternode Information: \n# methuselah-cli getinfo' && methuselah-cli -datadir=$datadir getinfo
 echo '==========================================================================='
