@@ -1,76 +1,129 @@
 #!/bin/bash
-# Methuselah Masternode Setup Script V1.1 for Ubuntu 16.04 LTS
+# Methuselah Masternode Setup Script V1.3 for Ubuntu 16.04 LTS
+  # © 2018 by -dwigt- for Methuselah
++#
++# Script will attempt to autodetect primary public IP address
++# and generate masternode private key unless specified in command line
++#
++# Usage:
++# bash reden-setup.sh [Masternode_Private_Key]
++#
++# Example 1: Existing genkey created earlier is supplied
++# bash reden-setup.sh 27dSmwq9CabKjo2L3UD1HvgBP3ygbn8HdNmFiGFoVbN1STcsypy
++#
++# Example 2: Script will generate a new genkey automatically
++# bash reden-setup.sh
++#
+ 
+ #Color codes
+ RED='\033[0;91m'
+ GREEN='\033[1;32m'
+ YELLOW='\033[1;33m'
+ NC='\033[0m' # No Color
+ 
+ #Methuselah TCP port
+ PORT=7555
 
 # Clears keyboard input buffer
 function clear_stdin { while read -r -t 0; do read -r; done; }
 
++#Delay script execution for N seconds
+ function delay { echo -e "${GREEN}Sleep for $1 seconds...${NC}"; sleep "$1"; }
+ 
++#Stop daemon if it's already running
++function stop_daemon {
++    if pgrep -x 'redend' > /dev/null; then
++        echo -e "${YELLOW}Attempting to stop redend${NC}"
++        reden-cli stop
++        delay 30
++        if pgrep -x 'redend' > /dev/null; then
++            echo -e "${RED}redend daemon is still running!${NC} \a"
++            echo -e "${YELLOW}Attempting to kill...${NC}"
++            pkill redend
++            delay 30
++            if pgrep -x 'redend' > /dev/null; then
++                echo -e "${RED}Can't stop redend! Reboot and try again...${NC} \a"
++                exit 2
++            fi
++        fi
++    fi
++}
++
++#Process command line parameters
++genkey=$1
++
 clear
-echo "Updating system and installing required packages..."
-sudo apt-get update -y
+ echo -e "${YELLOW}REDEN Masternode Setup Script V1.2 for Ubuntu 16.04 LTS${NC}"
+ echo -e "${GREEN}Updating system and installing required packages...${NC}"
++sudo DEBIAN_FRONTEND=noninteractive apt-get update -y
 
-# Install dig if it's not present
-dpkg -s dnsutils 2>/dev/null >/dev/null || sudo apt-get -y install dnsutils
++# Determine primary public IP address
+ dpkg -s dnsutils 2>/dev/null >/dev/null || sudo apt-get -y install dnsutils
+ publicip=$(dig +short myip.opendns.com @resolver1.opendns.com)
 
-echo "Methuselah Masternode Setup Script V1.1 for Ubuntu 16.04 LTS"
-
-publicip=''
-publicip=$(dig +short myip.opendns.com @resolver1.opendns.com)
-
-if [ -n $publicip ]; then
-    echo "IP Address detected:" $publicip
++if [ -n "$publicip" ]; then
+     echo -e "${YELLOW}IP Address detected:" $publicip ${NC}
 else
-    echo -e "ERROR: Public IP Address was not detected! \a"
-    clear_stdin
-    read -e -p "Enter VPS Public IP Address: " publicip
-fi
-
-#Methuselah TCP port
-Port='7555'
-
++    echo -e "${RED}ERROR:${YELLOW} Public IP Address was not detected!${NC} \a"
+     clear_stdin
+     read -e -p "Enter VPS Public IP Address: " publicip
++    if [ -z "$publicip" ]; then
++        echo -e "${RED}ERROR:${YELLOW} Public IP Address must be provided. Try again...${NC} \a"
++        exit 1
++    fi
+ fi
+ 
 # update packages and upgrade Ubuntu
-sudo apt-get -y upgrade
-sudo apt-get -y dist-upgrade
-sudo apt-get -y autoremove
-sudo apt-get -y install wget nano htop git jq
-sudo apt-get -y install libzmq3-dev
-sudo apt-get -y install libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev
-sudo apt-get -y install libevent-dev
+ sudo apt-get -y upgrade
+ sudo apt-get -y dist-upgrade
+ sudo apt-get -y autoremove
+ sudo apt-get -y install wget nano htop jq
+ sudo apt-get -y install libzmq3-dev
+ sudo apt-get -y install libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev
+ sudo apt-get -y install libevent-dev
+ 
+ sudo apt -y install software-properties-common
+ sudo add-apt-repository ppa:bitcoin/bitcoin -y
+ sudo apt-get -y update
+ sudo apt-get -y install libdb4.8-dev libdb4.8++-dev
+ 
+ sudo apt-get -y install libminiupnpc-dev
+ 
+ sudo apt-get -y install fail2ban
+ sudo service fail2ban restart
+ 
+ sudo apt-get install ufw -y
+ sudo apt-get update -y
+ 
+ sudo ufw default deny incoming
+ sudo ufw default allow outgoing
+ sudo ufw allow ssh
+ sudo ufw allow $PORT/tcp
+ echo -e "${YELLOW}"
+ sudo ufw --force enable
+ echo -e "${NC}"
 
-sudo apt -y install software-properties-common
-
-sudo add-apt-repository ppa:bitcoin/bitcoin -y
-sudo apt-get -y update
-sudo apt-get -y install libdb4.8-dev libdb4.8++-dev
-
-sudo apt-get -y install libminiupnpc-dev
-
-sudo apt-get -y install fail2ban
-sudo service fail2ban restart
-
-sudo apt-get install ufw -y
-sudo apt-get update -y
-
-sudo ufw default deny incoming
-sudo ufw default allow outgoing
-sudo ufw allow ssh
-sudo ufw allow $Port/tcp
-sudo ufw --force enable
-
-
-#Generating Random Password for methuselahd JSON RPC
-rpcpassword=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-
-#Create 2GB swap file
-if [ ! -f /var/swap.img ]; then
-    
-    echo -e 'Creating 2GB disk swap file... This may take a few minutes! \a'
-    touch /var/swap.img
-    chmod 600 swap.img
-    dd if=/dev/zero of=/var/swap.img bs=1024k count=2000
-    mkswap /var/swap.img
-    swapon /var/swap.img
-    echo '/var/swap.img none swap sw 0 0' >> /etc/fstab 
-fi
+ #Generating Random Password for redend JSON RPC
+ rpcpassword=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+ 
+ #Create 2GB swap file
+ if grep -q "SwapTotal" /proc/meminfo; then
+    +    echo -e "${GREEN}Skipping disk swap configuration...${NC} \n"
+ else
+     echo -e "${YELLOW}Creating 2GB disk swap file. \nThis may take a few minutes!${NC} \a"
+     touch /var/swap.img
+     chmod 600 swap.img
+     dd if=/dev/zero of=/var/swap.img bs=1024k count=2000
+     mkswap /var/swap.img 2> /dev/null
+     swapon /var/swap.img 2> /dev/null
+     if [ $? -eq 0 ]; then
+         echo '/var/swap.img none swap sw 0 0' >> /etc/fstab
++        echo -e "${GREEN}Swap was created successfully!${NC} \n"
+     else
+         echo -e "${YELLOW}Operation not permitted! Optional swap was not created.${NC} \a"
+         rm /var/swap.img
+     fi
+ fi
 
 #Installing Daemon
 cd ~
@@ -79,88 +132,100 @@ cd ~
 #sudo tar -xzvf methuselah-1.0.1.0-linux.tar.gz --strip-components 1 
 #sudo rm methuselah-1.0.1.0-linux.tar.gz
 
-# Copy binaries to /usr/bin
-sudo cp SAPMasternodeSetup/methuselah-1.0.1.0-linux/methuselah* /usr/bin/ > /dev/null
++stop_daemon
 
+# Deploy binaries to /usr/bin
+sudo cp SAPMasternodeSetup/methuselah-1.0.1.0-linux/methuselah* /usr/bin/
 sudo chmod 755 -R ~/SAPMasternodeSetup
 sudo chmod 755 /usr/bin/methuselah*
 
-#Stop daemon if it's already running
-if pgrep -x 'methuselah' > /dev/null; then
-	methuselah-cli stop
-	echo 'sleep for 10 seconds...'
-	sleep 10
-fi
++# Deploy masternode monitoring script
+ cp ~/SAPMasternodeSetup/nodemon.sh /usr/local/bin
+ sudo chmod 711 /usr/local/bin/nodemon.sh
 
-#Create methusula.conf
+#Create methusula datadir
 if [ ! -f ~/.methuselah/methuselah.conf ]; then 
 	sudo mkdir ~/.methuselah
 fi
 
-echo 'Creating methuselah.conf...'
-cat <<EOF > ~/.methuselah/methuselah.conf
+ echo -e "${YELLOW}Creating methuselah.conf...${NC}"
++
++# If genkey was not supplied in command line, we will generate private key on the fly
++if [ -z $genkey ]; then
++    cat <<EOF > ~/.redencore/reden.conf
 rpcuser=rpcuser
 rpcpassword=$rpcpassword
 EOF
 
-sudo chmod 755 -R ~/.methuselah/methuselah.conf
++    sudo chmod 755 -R ~/.methuselah/methuselah.conf
 
-#Starting daemon first time
-methuselahd -daemon
-echo 'sleep for 10 seconds...'
-sleep 10
++    #Starting daemon first time just to generate masternode private key
++    methuselah -daemon
++    delay 30
 
-#Generate masternode private key
-echo 'Generating masternode key...'
-genkey=$(methuselah-cli masternode genkey)
-methuselah-cli stop
-
++    #Generate masternode private key
++    echo -e "${YELLOW}Generating masternode private key...${NC}"
++    genkey=$(reden-cli masternode genkey)
++    if [ -z "$genkey" ]; then
++        echo -e "${RED}ERROR:${YELLOW}Can not generate masternode private key.$ \a"
++        echo -e "${RED}ERROR:${YELLOW}Reboot VPS and try again or supply existing genkey as a parameter."
++        exit 1
++    fi
++    
++    #Stopping daemon to create methuselah.conf
++    stop_daemon
++    delay 30
++fi
+ 
++# Create methuselah.conf
 cat <<EOF > ~/.methuselah/methuselah.conf
 rpcuser=methuselahrpc
 rpcpassword=$rpcpassword
 rpcallowip=127.0.0.1
+onlynet=ipv4
 listen=1
 server=1
 daemon=1
-maxconnections=65
+maxconnections=64
 externalip=$publicip
 masternode=1
 masternodeprivkey=$genkey
 EOF
 
-#Starting daemon second time
++#Finally, starting methuselah daemon with new methuselah.conf
 methuselahd
++delay 5
 
-#Setting auto star cron job for redend
-echo 'Configuring crontab job...'
-cronjob='@reboot sleep 30 && methuselahd'
-crontab -l > tempcron
-if ! grep -q "$cronjob" tempcron; then
-	echo $cronjob >> tempcron
-	crontab tempcron
-fi
-rm tempcron
+#Setting auto star cron job for methuselahd
+ cronjob="@reboot sleep 30 && methuselahd"
+ crontab -l > tempcron
+ if ! grep -q "$cronjob" tempcron; then
+     echo -e "${GREEN}Configuring crontab job...${NC}"
+     echo $cronjob >> tempcron
+     crontab tempcron
+ fi
+ rm tempcron
 
 echo -e "========================================================================
-Masternode setup is complete!
+ ${YELLOW}Masternode setup is complete!${NC}
 ========================================================================
 
-Masternode was installed with VPS IP Address: $publicip
+Masternode was installed with VPS IP Address: ${YELLOW}$publicip${NC}
 
-Masternode Private Key: $genkey
+Masternode Private Key: ${YELLOW}$genkey${NC}
 
 Now you can add the following string to the masternode.conf file
 for your Hot Wallet (the wallet with your Methuselah collateral funds):
 ======================================================================== \a"
-echo "mn1 $publicip:$Port $genkey TxId TxIdx"
+echo -e "${YELLOW}mn1 $publicip:$PORT $genkey TxId TxIdx${NC}"
 echo "========================================================================
 
 Use your mouse to copy the whole string above into the clipboard by
 tripple-click + single-click (Dont use Ctrl-C) and then paste it 
 into your masternodes.conf file and replace:
-    'mn1' - with your desired masternode name (alias)
-    'TxId' - with Transaction Id from masternode outputs
-    'TxIdx' - with Transaction Index (0 or 1)
+     ${YELLOW}mn1${NC} - with your desired masternode name (alias)
+     ${YELLOW}TxId${NC} - with Transaction Id from masternode outputs
+     ${YELLOW}TxIdx${NC} - with Transaction Index (0 or 1)
      Remember to save the masternode.conf and restart the wallet!
 
 To introduce your new masternode to the Methuselah network, you need to
@@ -175,8 +240,8 @@ on the network. Eventually the 'IsSynced' status will change
 to 'true', which will indicate a comlete sync, although it may take
 from several minutes to several hours depending on the network state.
 Your initial Masternode Status may read:
-    'Node just started, not yet activated' or
-    'Node  is not in masternode list', which is normal and expected.
+     ${YELLOW}Node just started, not yet activated${NC} or
+     ${YELLOW}Node  is not in masternode list${NC}, which is normal and expected.
 
 2) Wait at least until 'IsBlockchainSynced' status becomes 'true'.
 At this point you can go to your wallet and issue a start
@@ -203,7 +268,7 @@ clear_stdin
 read -p "*** Press any key to continue ***" -n1 -s
 
 echo -e "
-...scroll up to see previous screens...
+ ${GREEN}...scroll up to see previous screens...${NC}
 
 
 Here are some useful commands and tools for masternode troubleshooting:
@@ -211,7 +276,7 @@ Here are some useful commands and tools for masternode troubleshooting:
 ========================================================================
 To view masternode configuration produced by this script in reden.conf:
 
-cat ~/.methuselah/methuselah.conf
+${YELLOW}cat ~/.methuselah/methuselah.conf${NC}
 
 Here is your methuselah.conf generated by this script:
 ---------------------------------------"
@@ -221,23 +286,26 @@ echo -e "---------------------------------------
 NOTE: To edit methuselah.conf, first stop the methuselahd daemon,
 then edit the methuselah.conf file and save it in nano: (Ctrl-X + Y + Enter),
 then start the methuselahd daemon back up:
+ 
+ to stop:   ${YELLOW}methuselah-cli stop${NC}
+ to edit:   ${YELLOW}nano ~/.methuselah/methuselah.conf${NC}
+ to start:  ${YELLOW}methuselahd${NC}
 
-to stop:   methuselah-cli stop
-to edit:   nano ~/.methuselah/methuselah.conf
-to start:  methuselahd
 ========================================================================
 To view methuselahd debug log showing all MN network activity in realtime:
 
-tail -f ~/.methuselah/debug.log
+${yellow}tail -f ~/.methuselah/debug.log${NC}
 ========================================================================
 To monitor system resource utilization and running processes:
 
-htop
+${YELLOW}htop${NC}
 ========================================================================
 To view the list of peer connections, status of your masternode, 
 sync status etc. in real-time, run the nodemon.sh script:
 
-bash ~/SAPMasternodeSetup/nodemon.sh
+${YELLOW}nodemon.sh${NC}
+
+ or just type 'node' and hit <TAB> to autocomplete script name.
 ========================================================================
 
 
@@ -247,6 +315,6 @@ Authors:  AllroadAllroad [FasterPool.com], -Dwigt-
 
 ...and make sure to check back for updates!
 
-"
-
-~/SAPMasternodeSetup/nodemon.sh
+ "
+ # Run nodemon.sh
+ nodemon.sh
