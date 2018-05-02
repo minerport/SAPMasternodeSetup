@@ -6,13 +6,13 @@
 +# and generate masternode private key unless specified in command line
 +#
 +# Usage:
-+# bash reden-setup.sh [Masternode_Private_Key]
++# bash sap-setup.sh [Masternode_Private_Key]
 +#
 +# Example 1: Existing genkey created earlier is supplied
-+# bash reden-setup.sh 27dSmwq9CabKjo2L3UD1HvgBP3ygbn8HdNmFiGFoVbN1STcsypy
++# bash sap-setup.sh 27dSmwq9CabKjo2L3UD1HvgBP3ygbn8HdNmFiGFoVbN1STcsypy
 +#
 +# Example 2: Script will generate a new genkey automatically
-+# bash reden-setup.sh
++# bash sap-setup.sh
 +#
  
  #Color codes
