@@ -181,6 +181,7 @@ fi
 cat <<EOF > ~/.methuselah/methuselah.conf
 rpcuser=rpcuser
 rpcpassword=$rpcpassword
+rpcport=7555
 rpcallowip=127.0.0.1
 onlynet=ipv4
 listen=1
@@ -190,6 +191,7 @@ maxconnections=64
 externalip=$publicip
 masternode=1
 masternodeprivkey=$genkey
+promode=1
 EOF
 
 #Finally, starting reden daemon with new methuselah.conf
