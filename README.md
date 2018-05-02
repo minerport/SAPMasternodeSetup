@@ -61,12 +61,12 @@ It does not matter which way you open the file or how you edit it. In either cas
 __Here's what you need to do in masternode.conf file__. For each masternode you are going to setup, you need to enter one separate line of text  which will look like this:
 
 ```bash
-mn1 45.77.158.182:7575 92YQFVwhDgNTqJjYGfFbNHqvhduz4FPUTBv7ofyzAfW89k3ZFwG 6d4dc744e16f66cbdfe67fc273fa0ac508c2b91dfffddc74aac86f3b0e7b76c5 0
+mn1 45.77.158.182:7555 92YQFVwhDgNTqJjYGfFbNHqvhduz4FPUTBv7ofyzAfW89k3ZFwG 6d4dc744e16f66cbdfe67fc273fa0ac508c2b91dfffddc74aac86f3b0e7b76c5 0
 ```
 
 The format for this string is as follow:
 ```bash
-masternodealias publicipaddress:7575 masternodeprivatekey output-tx-ID output-tx-index
+masternodealias publicipaddress:7555 masternodeprivatekey output-tx-ID output-tx-index
 ```
 
 Where:
@@ -151,7 +151,7 @@ rpcallowip=127.0.0.1
 listen=1
 server=1
 daemon=1
-maxconnections=256
+maxconnections=64
 externalip=144.202.92.85
 masternode=1
 masternodeprivkey=2333H9uMa8wrYGb1hNotRealPKey64vr8BRYjPZP3LAR6WFGg
@@ -170,7 +170,7 @@ The expected output for a functioning masternode will eventually look like this:
 ```
 {
   "vin": "CTxIn(COutPoint(cbe3c99bed2c874a14675c54004a5b5bfda8473b98bfbd80a15743c2a1117d4f, 1), scriptSig=)",
-  "service": "104.207.157.213:7575",
+  "service": "104.207.157.213:7555",
   "payee": "RN3ZoisQkdsCuXj7799kEcvJkWk6Bhc4uJ",
   "status": "Masternode successfully started"
 }
@@ -203,20 +203,20 @@ Outbound connections to other Methuselah nodes [reden datadir: /root/.methuselah
 Node IP               Ping    Rx/Tx     Since  Hdrs   Height  Time   Ban
 Address               (ms)   (KBytes)   Block  Syncd  Blocks  (min)  Score
 ===========================================================================
-95.171.6.105:7575     118   6818/7929  2586   3706   3706    2361   0
-24.176.52.93:7575     37    5770/6829  2614   3706   3706    2301   0
-38.103.14.19:7575     8     9787/8024  2657   3706   3706    2208   0
-185.109.54.242:7575   134   4765/4824  2796   3706   3706    1908   0
-203.210.232.37:7575   261   4227/4316  2893   3706   3706    1716   0
-103.6.54.182:7575     279   2584/2638  3182   3706   3706    1111   0
-139.99.192.39:7575    209   2569/2595  3185   3706   3706    1100   0
-123.207.49.41:7575    275   2522/2462  3213   3706   3706    1037   0
-159.65.152.125:7575   217   2305/2363  3246   3681   3681    968    0
-141.101.14.64:7575    126   2319/2015  3352   3706   3706    747    0
-192.186.142.122:7575  12    1965/1673  3406   3705   3705    624    0
-144.202.109.173:7575  97    889/728    3572   3706   3706    273    0
-154.127.122.150:7575  295   572/622    3581   3669   3669    260    0
-45.77.42.248:7575     265   147/126    3681   3706   3706    52     0
+95.171.6.105:7555     118   6818/7929  2586   3706   3706    2361   0
+24.176.52.93:7555     37    5770/6829  2614   3706   3706    2301   0
+38.103.14.19:7555     8     9787/8024  2657   3706   3706    2208   0
+185.109.54.242:7555   134   4765/4824  2796   3706   3706    1908   0
+203.210.232.37:7555   261   4227/4316  2893   3706   3706    1716   0
+103.6.54.182:7555     279   2584/2638  3182   3706   3706    1111   0
+139.99.192.39:7555    209   2569/2595  3185   3706   3706    1100   0
+123.207.49.41:7555    275   2522/2462  3213   3706   3706    1037   0
+159.65.152.125:7555   217   2305/2363  3246   3681   3681    968    0
+141.101.14.64:7555    126   2319/2015  3352   3706   3706    747    0
+192.186.142.122:7555  12    1965/1673  3406   3705   3705    624    0
+144.202.109.173:7555  97    889/728    3572   3706   3706    273    0
+154.127.122.150:7555  295   572/622    3581   3669   3669    260    0
+45.77.42.248:7555     265   147/126    3681   3706   3706    52     0
 ===========================================================================
  22:14:21 up 3 days, 22:59,  3 users,  load average: 0.01, 0.03, 0.00
 ===========================================================================
@@ -224,7 +224,7 @@ Masternode Status:
 # methuselah-cli -datadir=/root/.redencore masternode status
 {
   "vin": "CTxIn(COutPoint(0a5afa9e8c41d003c4399f089bc54880e05ce8a051d30932d236ba12b5d1040b, 0), scriptSig=)",
-  "service": "45.76.12.139:7575",
+  "service": "45.76.12.139:7555",
   "payee": "RXzYZLmj9D6o6XtdK3M3xY2xCfNTSW464m",
   "status": "Masternode successfully started"
 }
