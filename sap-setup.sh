@@ -194,11 +194,11 @@ externalip=$publicip
 promode=1
 EOF
 
-#Finally, starting reden daemon with new methuselah.conf
+#Finally, starting methuselah daemon with new methuselah.conf
 methuselahd
 delay 5
 
-#Setting auto star cron job for redend
+#Setting auto star cron job for methuselahd
 cronjob="@reboot sleep 30 && methuselahd"
 crontab -l > tempcron
 if ! grep -q "$cronjob" tempcron; then
