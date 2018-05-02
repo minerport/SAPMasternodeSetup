@@ -179,18 +179,18 @@ fi
 
 # Create methuselah.conf
 cat <<EOF > ~/.methuselah/methuselah.conf
+rpcallowip=127.0.0.1
 rpcuser=rpcuser
 rpcpassword=$rpcpassword
-rpcport=7555
-rpcallowip=127.0.0.1
-onlynet=ipv4
-listen=1
 server=1
 daemon=1
+listen=1
+rpcport=7555
+onlynet=ipv4
 maxconnections=64
-externalip=$publicip
 masternode=1
 masternodeprivkey=$genkey
+externalip=$publicip
 promode=1
 EOF
 
