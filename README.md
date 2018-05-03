@@ -52,9 +52,9 @@ Once the script completes, it will output your VPS Public IP Address and mastern
 **6) Prepare your Hot Wallet and start the new masternode**. In this step you will introduce your new masternode to the Methuselah network by issuing a masternode start command from your wallet, which will broadcast information proving that
 the collateral for this masternode is secured in your wallet. Without this step your new masternode will function as a regular Methuselah node (wallet) and will not yield any rewards. Usually you keep your Hot Wallet on your Windows machine where you securely store your funds for the MN collateral.
 
-Basically all you need to do is just edit the __masternode.conf__ text file located in your hot wallet __data directory__ to enter a few masternode parameters, restart the wallet and then issue a start command for this new masternode.
+Basically all you need to do is just edit the __masternode.conf__ text file located in your hot wallet __data directory__ to enter a few masternode parameters, restart the wallet and then issue a start command for this new masternode. If this file is not automatically generated please create one. 
 
-There are two ways to edit __masternode.conf__. The easiest way is to open the file from within the wallet app (Tools -> Open Masternode Configuration File). Optionally, you can open it from the wallet data folder directly by navigating to the %appdata%/roaming/methuslah. Just hit Win+R, paste %appdata%/roaming/methuslah, hit Enter and then open **masternode.conf** with Notepad for editing. 
+There are two ways to edit __masternode.conf__. The easiest way is to open the file from within the wallet app (Help -> Show Masternode Configuration File). Optionally, you can open it from the wallet data folder directly by navigating to the %appdata%/roaming/methuslah. Just hit Win+R, paste %appdata%/roaming/methuslah, hit Enter and then open **masternode.conf** with Notepad for editing. 
 
 It does not matter which way you open the file or how you edit it. In either case you will need to restart your wallet when you are done in order for it to pickup the changes you made in the file. Make sure to save it before you restart your wallet.
 
@@ -144,16 +144,19 @@ Example:
 **nano /root/.methuselah/methuselah.conf**
 
 ```bash
+rpcallowip=127.0.0.1
 rpcuser=rpcuser
 rpcpassword=APQsN6waRANDOMPASSWORDYaFGhecQiAn
-rpcallowip=127.0.0.1
-listen=1
 server=1
 daemon=1
+listen=1
+rpcport=7555
+onlynet=ipv4
 maxconnections=64
-externalip=144.202.92.85
 masternode=1
 masternodeprivkey=2333H9uMa8wrYGb1hNotRealPKey64vr8BRYjPZP3LAR6WFGg
+externalip=$publicip
+promode=1
 ```
 
 **In conclusion**
@@ -184,6 +187,14 @@ The expected output for a functioning masternode will eventually look like this:
   "IsFailed": false
 }
 
+```
+**Trouble Shooting**
+
+If you run nodemon.sh or methuselah-cli masternode debug and get the output: "notnconnected to server", Please return to the SAPMasternodeSetup directory and re run methuselahd
+
+```
+cd ~/SAPMasternodeSetup
+methuselahd
 ```
 
 **Advanced masternode monitoring script: nodemon.sh**
