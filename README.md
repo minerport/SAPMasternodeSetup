@@ -196,6 +196,8 @@ If you run nodemon.sh or methuselah-cli masternode debug and get the output: "no
 cd ~/SAPMasternodeSetup
 methuselahd
 ```
+If you do not see <masternode alias> in the masternode tab return to coin control features and unlock unspent 9600SAP.
+Then return to the masternode tab and right click and run the alias.
 
 **Advanced masternode monitoring script: nodemon.sh**
 
