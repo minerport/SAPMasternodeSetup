@@ -296,8 +296,6 @@ Enjoy your Methuselah Masternode and thanks for using this setup script!
 Authors: Allroad [fasterpool] , Dwigt007
 ...and make sure to check back for updates!
 "
-# Attemping to run methuselahd again 
-methuselahd
 delay 30
 # Run nodemon.sh
 nodemon.sh
