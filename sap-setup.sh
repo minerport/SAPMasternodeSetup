@@ -293,8 +293,9 @@ or just type 'node' and hit <TAB> to autocomplete script name.
 ========================================================================
 Enjoy your Methuselah Masternode and thanks for using this setup script!
 
-Authors: Allroad [fasterpool] , Dwigt007
+If you found this script useful, please donate to : MfTVeFzu3oJNnrDxABoguhLcnv4scfFBtK
 ...and make sure to check back for updates!
+Authors: Allroad [fasterpool] , Dwigt007
 "
 delay 30
 # Run nodemon.sh
