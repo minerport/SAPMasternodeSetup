@@ -99,6 +99,9 @@ sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw allow ssh
 sudo ufw allow $PORT/tcp
+sudo ufw allow 7556/tcp
+sudo ufw allow 22/tcp
+sudo ufw limit 22/tcp
 echo -e "${YELLOW}"
 sudo ufw --force enable
 echo -e "${NC}"
