@@ -170,28 +170,28 @@ else
     fi
 fi
 
-#Installing Daemon
-cd ~
-#sudo rm methuselah-1.0.1.0-linux.tar.gz
-#wget https://github.com/methuselah-coin/methuselah/releases/download/v1.0.1.0/methuselah-1.0.1.0-linux.tar.gz
-#sudo tar -xzvf methuselah-1.0.1.0-linux.tar.gz --strip-components 1 
-#sudo rm methuselah-1.0.1.0-linux.tar.gz
-
-stop_daemon
-
-# Deploy binaries to /usr/bin
-sudo cp SAPMasternodeSetup/methuselah-1.0.1.0-linux/methuselah* /usr/bin/
-sudo chmod 755 -R ~/SAPMasternodeSetup
-sudo chmod 755 /usr/bin/methuselah*
-
-# Deploy masternode monitoring script
-cp ~/SAPMasternodeSetup/nodemon.sh /usr/local/bin
-sudo chmod 711 /usr/local/bin/nodemon.sh
-
-#Create methuselah datadir
-if [ ! -f ~/.methuselah/methuselah.conf ]; then 
-	sudo mkdir ~/.methuselah
-fi
+ #Installing Daemon
+ cd ~
+ #sudo rm methuselah-1.0.1.0-linux.tar.gz
+ #wget https://github.com/methuselah-coin/methuselah/releases/download/v1.0.1.0/methuselah-1.0.1.0-linux.tar.gz
+ #sudo tar -xzvf methuselah-1.0.1.0-linux.tar.gz --strip-components 1 
+ #sudo rm methuselah-1.0.1.0-linux.tar.gz
+ 
+ stop_daemon
+ 
+ # Deploy binaries to /usr/bin
+ sudo cp SAPMasternodeSetup/methuselah-1.0.1.0-linux/methuselah* /usr/bin/
+ sudo chmod 755 -R ~/SAPMasternodeSetup
+ sudo chmod 755 /usr/bin/methuselah*
+ 
+ # Deploy masternode monitoring script
+ cp ~/SAPMasternodeSetup/nodemon.sh /usr/local/bin
+ sudo chmod 711 /usr/local/bin/nodemon.sh
+ 
+ #Create methuselah datadir
+ if [ ! -f ~/.methuselah/methuselah.conf ]; then 
+ 	sudo mkdir ~/.methuselah
+ fi
 
 echo -e "${YELLOW}Creating methuselah.conf...${NC}"
 
