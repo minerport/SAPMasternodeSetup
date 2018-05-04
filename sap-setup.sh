@@ -171,11 +171,10 @@ else
 fi
 
 #Installing Daemon
-#cd ~
+cd ~
 #sudo rm methuselah-1.0.1.0-linux.tar.gz
 #wget https://github.com/methuselah-coin/methuselah/releases/download/v1.0.1.0/methuselah-1.0.1.0-linux.tar.gz
-#sudo tar -xzvf methuselah-1.0.1.0-linux.tar.gz --strip-components 1 -C ~/bin
-#source ~/.profile
+#sudo tar -xzvf methuselah-1.0.1.0-linux.tar.gz --strip-components 1 
 #sudo rm methuselah-1.0.1.0-linux.tar.gz
 
 stop_daemon
