@@ -275,7 +275,9 @@ Thank you for using the script!
 
 ...make sure to check back for updates!
 
-If you feel like donating, bring your hash to https://fasterpool.com
+If you found this script useful donations can be sent to : MfTVeFzu3oJNnrDxABoguhLcnv4scfFBtK
+
+OR, you can bring your hash to https://fasterpool.com
 We have 0% fees and hourly payouts!
 
 
