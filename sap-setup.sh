@@ -171,9 +171,9 @@ fi
 
  #Installing Daemon
  cd ~
- wget https://github.com/methuselah-coin/methuselah/releases/download/v1.0.1.0/methuselah-1.0.1.0-linux.tar.gz
- sudo tar -xzf methuselah-1.0.1.0-linux.tar.gz -C SAPMasternodeSetup
- sudo rm methuselah-1.0.1.0-linux.tar.gz
+ #wget https://github.com/methuselah-coin/methuselah/releases/download/v1.0.1.0/methuselah-1.0.1.0-linux.tar.gz
+ #sudo tar -xzf methuselah-1.0.1.0-linux.tar.gz -C SAPMasternodeSetup
+ #sudo rm methuselah-1.0.1.0-linux.tar.gz
  
  stop_daemon
  
