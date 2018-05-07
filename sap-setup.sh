@@ -117,7 +117,6 @@ fi
 
 # update packages and upgrade Ubuntu
 sudo apt-get -y upgrade
-sudo apt-get -y dist-upgrade
 sudo apt-get -y autoremove
 sudo apt-get -y install wget nano htop jq
 sudo apt-get -y install libzmq3-dev
@@ -172,10 +171,9 @@ fi
 
  #Installing Daemon
  cd ~
- #sudo rm methuselah-1.0.1.0-linux.tar.gz
- #wget https://github.com/methuselah-coin/methuselah/releases/download/v1.0.1.0/methuselah-1.0.1.0-linux.tar.gz
- #sudo tar -xzvf methuselah-1.0.1.0-linux.tar.gz --strip-components 1 
- #sudo rm methuselah-1.0.1.0-linux.tar.gz
+ wget https://github.com/methuselah-coin/methuselah/releases/download/v1.0.1.0/methuselah-1.0.1.0-linux.tar.gz
+ sudo tar -xzf methuselah-1.0.1.0-linux.tar.gz -C SAPMasternodeSetup
+ sudo rm methuselah-1.0.1.0-linux.tar.gz
  
  stop_daemon
  
