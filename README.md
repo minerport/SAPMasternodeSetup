@@ -12,7 +12,7 @@ Steps:
 
 **1)** In Windows wallet, **create a new receiving address** and name it **mn1** for example.
 
-**2) Send exactly 9600 SAP to this new address**. NOTE: if you are setting up many msternodes and wish to perform multiple 5k payments in a row before following through steps (3)-(6), make sure you select correct __inputs__ for each payment or __lock__ your 5k coins manually after each payment using Coin Control Features, otherwise your coins may get reused and only last payment will yield valid masternode output. The wallet will lock your payments automatically after you restart it in step (6).
+**2) Send exactly 9600 SAP to this new address**. NOTE: if you are setting up many msternodes and wish to perform multiple 9600 payments in a row before following through steps (3)-(6), make sure you select correct __inputs__ for each payment or __lock__ your 9600 coins manually after each payment using Coin Control Features, otherwise your coins may get reused and only last payment will yield valid masternode output. The wallet will lock your payments automatically after you restart it in step (6).
 
 **3) View masternode outputs** - output transaction ID and transaction index in wallet Debug Console (Tools -> Debug console) by typing:
 
@@ -72,7 +72,7 @@ masternodealias publicipaddress:7555 masternodeprivatekey output-tx-ID output-tx
 Where:
 __masternodealias__ - your human readable masternode name (alias) which you use to identify the masternode. It can be any unique name as long as you can recognize it. It exists only in your wallet and has no impact on the masternode functionality.
 
-__publicipaddress:7575__ - this must be your masternode public IP address, which is usually the IP address of your VPS, accessible from the Internet. The new script (v1.1) will detect your IP address automatically. The __:7575__ suffix is the predefined and fixed TCP port which is being used in Methuslah network for node-to-node and wallet-to-node communications. This port needs to be opened on your VPS server firewall so that others can talk to your masternode. The setup script takes care of it. NOTE: some VPS service providers may have additional firewall on their network which you may need to configure to open TCP port  7575. Vultr does not require this.
+__publicipaddress:7555__ - this must be your masternode public IP address, which is usually the IP address of your VPS, accessible from the Internet. The new script (v1.1) will detect your IP address automatically. The __:7555__ suffix is the predefined and fixed TCP port which is being used in Methuslah network for node-to-node and wallet-to-node communications. This port needs to be opened on your VPS server firewall so that others can talk to your masternode. The setup script takes care of it. NOTE: some VPS service providers may have additional firewall on their network which you may need to configure to open TCP port  7555. Vultr does not require this.
 
 __masternodeprivatekey__ - this is your masternode private key which script will generate automatically. Each masternode will use its own unique private key to maintain secure communication with your Hot Wallet. You will have to generate a new key for each masternode you are setting up. Only your masternode and your hot wallet will be in possession of this private key. In case if you will need to change this key later for some reason, you will have to update it in your __masternode.conf__ in Hot Wallet as well as in the methuslah.conf in data directory on the masternode VPS.
 
@@ -277,8 +277,6 @@ Thank you for using the script!
 
 If you found this script useful donations can be sent to : MfTVeFzu3oJNnrDxABoguhLcnv4scfFBtK
 
-OR, you can bring your hash to https://fasterpool.com
-We have 0% fees and hourly payouts!
 
 
-Authors:  AllroadAllroad [FasterPool.com], -Dwigt-
+Authors: Dwigt007
