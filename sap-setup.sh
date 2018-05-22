@@ -1,5 +1,5 @@
 #!/bin/bash
-# METHUSELAH Masternode Setup Script V1.3 for Ubuntu 16.04 LTS
+# METHUSELAH Masternode Setup Script V1.4 for Ubuntu 16.04 LTS
 # (c) 2018 by Dwigt007 for Methuselah
 #
 # Script will attempt to autodetect primary public IP address
@@ -95,7 +95,7 @@ MMMMMMMMMMMMMMMMMMMMMMMWNKOxoc::;,''..'',;:cloxOKNWMMMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWNNXXXXXXNWWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 "
 delay 5
-echo -e "${YELLOW}METHUSELAH Masternode Setup Script V1.3 for Ubuntu 16.04 LTS${NC}"
+echo -e "${YELLOW}METHUSELAH Masternode Setup Script V1.4 for Ubuntu 16.04 LTS${NC}"
 echo -e "${GREEN}Updating system and installing required packages...${NC}"
 sudo DEBIAN_FRONTEND=noninteractive apt-get update -y
 
