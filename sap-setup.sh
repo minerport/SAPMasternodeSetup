@@ -1,5 +1,5 @@
 #!/bin/bash
-# METHUSELAH Masternode Setup Script V1.3 for Ubuntu 16.04 LTS
+# METHUSELAH Masternode Setup Script V1.4 for Ubuntu 16.04 LTS
 # (c) 2018 by Dwigt007 for Methuselah
 #
 # Script will attempt to autodetect primary public IP address
@@ -23,6 +23,7 @@ NC='\033[0m' # No Color
 
 #Methuselah TCP port
 PORT=7555
+RPC=7556
 
 #Clear keyboard input buffer
 function clear_stdin { while read -r -t 0; do read -r; done; }
@@ -95,7 +96,7 @@ MMMMMMMMMMMMMMMMMMMMMMMWNKOxoc::;,''..'',;:cloxOKNWMMMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWNNXXXXXXNWWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 "
 delay 5
-echo -e "${YELLOW}METHUSELAH Masternode Setup Script V1.3 for Ubuntu 16.04 LTS${NC}"
+echo -e "${YELLOW}METHUSELAH Masternode Setup Script V1.4 for Ubuntu 16.04 LTS${NC}"
 echo -e "${GREEN}Updating system and installing required packages...${NC}"
 sudo DEBIAN_FRONTEND=noninteractive apt-get update -y
 
@@ -106,14 +107,17 @@ publicip=$(dig +short myip.opendns.com @resolver1.opendns.com)
 if [ -n "$publicip" ]; then
     echo -e "${YELLOW}IP Address detected:" $publicip ${NC}
 else
-    echo -e "${RED}ERROR:${YELLOW} Public IP Address was not detected!${NC} \a"
+    echo -e "${RED}ERROR: Public IP Address was not detected!${NC} \a"
     clear_stdin
     read -e -p "Enter VPS Public IP Address: " publicip
     if [ -z "$publicip" ]; then
-        echo -e "${RED}ERROR:${YELLOW} Public IP Address must be provided. Try again...${NC} \a"
+        echo -e "${RED}ERROR: Public IP Address must be provided. Try again...${NC} \a"
         exit 1
     fi
 fi
+
+#Killing running daemon
+pkill ./methuselahd
 
 # update packages and upgrade Ubuntu
 sudo apt-get -y upgrade
@@ -140,7 +144,7 @@ sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw allow ssh
 sudo ufw allow $PORT/tcp
-sudo ufw allow 7556/tcp
+sudo ufw allow $RPC/tcp
 sudo ufw allow 22/tcp
 sudo ufw limit 22/tcp
 echo -e "${YELLOW}"
@@ -148,6 +152,7 @@ sudo ufw --force enable
 echo -e "${NC}"
 
 #Generating Random Password for methuselahd JSON RPC
+rpcuser=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 rpcpassword=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
 #Create 2GB swap file
@@ -169,11 +174,12 @@ else
     fi
 fi
 
- #Installing Daemon
+ echo -e "${GREEN}Installing Daemon from GitHub!${NC}"
  cd ~
- #wget https://github.com/methuselah-coin/methuselah/releases/download/v1.0.1.0/methuselah-1.0.1.0-linux.tar.gz
- #sudo tar -xzf methuselah-1.0.1.0-linux.tar.gz -C SAPMasternodeSetup
- #sudo rm methuselah-1.0.1.0-linux.tar.gz
+ mkdir /root/SAPMasternodeSetup/methuselah-1.0.1.0-linux
+ wget https://github.com/methuselah-coin/methuselah/releases/download/v1.0.1.0/methuselah-1.0.1.0-linux.tar.gz
+ sudo  sudo tar -xf methuselah-1.0.1.0-linux.tar.gz -C /root/SAPMasternodeSetup/methuselah-1.0.1.0-linux
+ sudo rm methuselah-1.0.1.0-linux.tar.gz
  
  stop_daemon
  
@@ -196,7 +202,7 @@ echo -e "${YELLOW}Creating methuselah.conf...${NC}"
 # If genkey was not supplied in command line, we will generate private key on the fly
 if [ -z $genkey ]; then
     cat <<EOF > ~/.methuselah/methuselah.conf
-rpcuser=rpcuser
+rpcuser=$rpcuser
 rpcpassword=$rpcpassword
 EOF
 
@@ -210,8 +216,8 @@ EOF
     echo -e "${YELLOW}Generating masternode private key...${NC}"
     genkey=$(methuselah-cli masternode genkey)
     if [ -z "$genkey" ]; then
-        echo -e "${RED}ERROR:${YELLOW}Can not generate masternode private key.$ \a"
-        echo -e "${RED}ERROR:${YELLOW}Reboot VPS and try again or supply existing genkey as a parameter."
+        echo -e "${RED}ERROR: Can not generate masternode private key.${NC} \a"
+        echo -e "${RED}ERROR: Reboot VPS and try again or supply existing genkey as a parameter.${NC}"
         exit 1
     fi
     
@@ -223,12 +229,12 @@ fi
 # Create methuselah.conf
 cat <<EOF > ~/.methuselah/methuselah.conf
 rpcallowip=127.0.0.1
-rpcuser=rpcuser
+rpcuser=$rpcuser
 rpcpassword=$rpcpassword
 server=1
 daemon=1
 listen=1
-rpcport=7556
+rpcport=$RPC
 onlynet=ipv4
 maxconnections=64
 masternode=1
@@ -267,6 +273,7 @@ into your ${YELLOW}masternode.conf${NC} file and replace:
     ${YELLOW}mn1${NC} - with your desired masternode name (alias)
     ${YELLOW}TxId${NC} - with Transaction Id from masternode outputs
     ${YELLOW}TxIdx${NC} - with Transaction Index (0 or 1)
+    ${GREEN}NOTE: you may have to create a masternode.conf, do that now!${NC}
      Remember to save the masternode.conf and restart the wallet!
 To introduce your new masternode to the Methuselah network, you need to
 issue a masternode start command from your wallet, which proves that
@@ -285,7 +292,7 @@ Your initial Masternode Status may read:
 2) Wait at least until 'IsBlockchainSynced' status becomes 'true'.
 At this point you can go to your wallet and issue a start
 command by either using Debug Console:
-    Tools->Debug Console-> enter: ${YELLOW}masternode start-alias mn1${NC}
+    Help->Debug Console-> enter: ${YELLOW}"lockunspent true" then "masternode start-alias mn1"${NC}
     where ${YELLOW}mn1${NC} is the name of your masternode (alias)
     as it was entered in the masternode.conf file
     
@@ -333,9 +340,10 @@ or just type 'node' and hit <TAB> to autocomplete script name.
 ========================================================================
 Enjoy your Methuselah Masternode and thanks for using this setup script!
 
-If you found this script useful, please donate to : MfTVeFzu3oJNnrDxABoguhLcnv4scfFBtK
+If you found this script useful, please donate to : 
+MfTVeFzu3oJNnrDxABoguhLcnv4scfFBtK
 ...and make sure to check back for updates!
-Authors: Allroad [fasterpool] , Dwigt007
+Authors: Dwigt007
 "
 delay 30
 # Run nodemon.sh
