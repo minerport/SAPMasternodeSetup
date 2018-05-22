@@ -23,6 +23,7 @@ NC='\033[0m' # No Color
 
 #Methuselah TCP port
 PORT=7555
+RPC=7556
 
 #Clear keyboard input buffer
 function clear_stdin { while read -r -t 0; do read -r; done; }
@@ -106,14 +107,17 @@ publicip=$(dig +short myip.opendns.com @resolver1.opendns.com)
 if [ -n "$publicip" ]; then
     echo -e "${YELLOW}IP Address detected:" $publicip ${NC}
 else
-    echo -e "${RED}ERROR:${YELLOW} Public IP Address was not detected!${NC} \a"
+    echo -e "${RED}ERROR: Public IP Address was not detected!${NC} \a"
     clear_stdin
     read -e -p "Enter VPS Public IP Address: " publicip
     if [ -z "$publicip" ]; then
-        echo -e "${RED}ERROR:${YELLOW} Public IP Address must be provided. Try again...${NC} \a"
+        echo -e "${RED}ERROR: Public IP Address must be provided. Try again...${NC} \a"
         exit 1
     fi
 fi
+
+#Killing running daemon
+pkill ./methuselahd
 
 # update packages and upgrade Ubuntu
 sudo apt-get -y upgrade
@@ -140,7 +144,7 @@ sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw allow ssh
 sudo ufw allow $PORT/tcp
-sudo ufw allow 7556/tcp
+sudo ufw allow $RPC/tcp
 sudo ufw allow 22/tcp
 sudo ufw limit 22/tcp
 echo -e "${YELLOW}"
@@ -212,8 +216,8 @@ EOF
     echo -e "${YELLOW}Generating masternode private key...${NC}"
     genkey=$(methuselah-cli masternode genkey)
     if [ -z "$genkey" ]; then
-        echo -e "${RED}ERROR:${YELLOW}Can not generate masternode private key.$ \a"
-        echo -e "${RED}ERROR:${YELLOW}Reboot VPS and try again or supply existing genkey as a parameter."
+        echo -e "${RED}ERROR: Can not generate masternode private key.${NC} \a"
+        echo -e "${RED}ERROR: Reboot VPS and try again or supply existing genkey as a parameter.${NC}"
         exit 1
     fi
     
@@ -230,7 +234,7 @@ rpcpassword=$rpcpassword
 server=1
 daemon=1
 listen=1
-rpcport=7556
+rpcport=$RPC
 onlynet=ipv4
 maxconnections=64
 masternode=1
@@ -269,6 +273,7 @@ into your ${YELLOW}masternode.conf${NC} file and replace:
     ${YELLOW}mn1${NC} - with your desired masternode name (alias)
     ${YELLOW}TxId${NC} - with Transaction Id from masternode outputs
     ${YELLOW}TxIdx${NC} - with Transaction Index (0 or 1)
+    ${GREEN}NOTE: you may have to create a masternode.conf, do that now!${NC}
      Remember to save the masternode.conf and restart the wallet!
 To introduce your new masternode to the Methuselah network, you need to
 issue a masternode start command from your wallet, which proves that
@@ -287,7 +292,7 @@ Your initial Masternode Status may read:
 2) Wait at least until 'IsBlockchainSynced' status becomes 'true'.
 At this point you can go to your wallet and issue a start
 command by either using Debug Console:
-    Tools->Debug Console-> enter: ${YELLOW}masternode start-alias mn1${NC}
+    Help->Debug Console-> enter: ${YELLOW}"lockunspent true" then "masternode start-alias mn1"${NC}
     where ${YELLOW}mn1${NC} is the name of your masternode (alias)
     as it was entered in the masternode.conf file
     
