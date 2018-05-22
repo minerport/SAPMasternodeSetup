@@ -148,6 +148,7 @@ sudo ufw --force enable
 echo -e "${NC}"
 
 #Generating Random Password for methuselahd JSON RPC
+rpcuser=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 rpcpassword=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
 
 #Create 2GB swap file
@@ -169,11 +170,12 @@ else
     fi
 fi
 
- #Installing Daemon
+ echo -e "${GREEN}Installing Daemon from GitHub!${NC}"
  cd ~
- #wget https://github.com/methuselah-coin/methuselah/releases/download/v1.0.1.0/methuselah-1.0.1.0-linux.tar.gz
- #sudo tar -xzf methuselah-1.0.1.0-linux.tar.gz -C SAPMasternodeSetup
- #sudo rm methuselah-1.0.1.0-linux.tar.gz
+ mkdir /root/SAPMasternodeSetup/methuselah-1.0.1.0-linux
+ wget https://github.com/methuselah-coin/methuselah/releases/download/v1.0.1.0/methuselah-1.0.1.0-linux.tar.gz
+ sudo  sudo tar -xf methuselah-1.0.1.0-linux.tar.gz -C /root/SAPMasternodeSetup/methuselah-1.0.1.0-linux
+ sudo rm methuselah-1.0.1.0-linux.tar.gz
  
  stop_daemon
  
@@ -196,7 +198,7 @@ echo -e "${YELLOW}Creating methuselah.conf...${NC}"
 # If genkey was not supplied in command line, we will generate private key on the fly
 if [ -z $genkey ]; then
     cat <<EOF > ~/.methuselah/methuselah.conf
-rpcuser=rpcuser
+rpcuser=$rpcuser
 rpcpassword=$rpcpassword
 EOF
 
@@ -223,7 +225,7 @@ fi
 # Create methuselah.conf
 cat <<EOF > ~/.methuselah/methuselah.conf
 rpcallowip=127.0.0.1
-rpcuser=rpcuser
+rpcuser=$rpcuser
 rpcpassword=$rpcpassword
 server=1
 daemon=1
@@ -333,9 +335,10 @@ or just type 'node' and hit <TAB> to autocomplete script name.
 ========================================================================
 Enjoy your Methuselah Masternode and thanks for using this setup script!
 
-If you found this script useful, please donate to : MfTVeFzu3oJNnrDxABoguhLcnv4scfFBtK
+If you found this script useful, please donate to : 
+MfTVeFzu3oJNnrDxABoguhLcnv4scfFBtK
 ...and make sure to check back for updates!
-Authors: Allroad [fasterpool] , Dwigt007
+Authors: Dwigt007
 "
 delay 30
 # Run nodemon.sh
