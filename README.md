@@ -52,6 +52,9 @@ Once the script completes, it will output your VPS Public IP Address and mastern
 **6) Prepare your Hot Wallet and start the new masternode**. In this step you will introduce your new masternode to the Methuselah network by issuing a masternode start command from your wallet, which will broadcast information proving that
 the collateral for this masternode is secured in your wallet. Without this step your new masternode will function as a regular Methuselah node (wallet) and will not yield any rewards. Usually you keep your Hot Wallet on your Windows machine where you securely store your funds for the MN collateral.
 
+***NOTE***
+If masternode.conf does not exist please make a new file named __masternode.conf__ NOT masternode.conf.tx ONLY __masternode.conf__.
+
 Basically all you need to do is just edit the __masternode.conf__ text file located in your hot wallet __data directory__ to enter a few masternode parameters, restart the wallet and then issue a start command for this new masternode. If this file is not automatically generated please create one. 
 
 There are two ways to edit __masternode.conf__. The easiest way is to open the file from within the wallet app (Help -> Show Masternode Configuration File). Optionally, you can open it from the wallet data folder directly by navigating to the %appdata%/roaming/methuslah. Just hit Win+R, paste %appdata%/roaming/methuslah, hit Enter and then open **masternode.conf** with Notepad for editing. 
@@ -101,8 +104,13 @@ Finally, you need to either __restart__ the wallet app, unlock it with your encr
 
 Once the wallet is fully synchronized and your masternode setup script on VPS has finished its synchronization with the network, you can **issue a start broadcast** from your hot wallet to tell the others on Methuslah network about your new masternode.
 
-Todo so you can either run a simple command in Debug Console (Tools -> Debug console):
+Todo so you can either run a simple command in Debug Console (Help -> Debug console):
 
+**FIRST**
+```bash
+lockunspent true
+```
+**SECOND**
 ```bash
 masternode start-alias <masternodename>
 ```
@@ -126,6 +134,10 @@ Finally, to **monitor your masternode status** you can use the following command
 
 ```bash
 methuselah-cli masternode debug
+
+OR
+
+nodemon.sh to see every aspect of your masternode
 
 ```
 
@@ -207,7 +219,7 @@ Typically you should see more than a few nodes listed in the table and the amoun
 
 Currently methuslah nodes will display most (if not all) peers with IPv6 addresses. This is normal as long as the data is being transferred and peers stay connected for a long time. Initially, when the node is just started, the outbound connection table may not show any peers for quite some time. It may take several hours to build up a healthy and stable list of peers.
 
-Sample output of the script from node 45.76.12.139 on Apr-26th 2018:
+Sample output of the script from node 45.76.12.139 on May 5, 2018:
 ```
 ===========================================================================
 Outbound connections to other Methuselah nodes [methuslah datadir: /root/.methuselah]
