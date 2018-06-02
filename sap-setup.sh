@@ -176,9 +176,9 @@ fi
 
  echo -e "${GREEN}Installing Daemon from GitHub!${NC}"
  cd ~
- mkdir /root/SAPMasternodeSetup/methuselah-1.0.1.0-linux
+ mkdir ~/SAPMasternodeSetup/methuselah-1.0.1.0-linux
  wget https://github.com/methuselah-coin/methuselah/releases/download/v1.0.1.0/methuselah-1.0.1.0-linux.tar.gz
- sudo  sudo tar -xf methuselah-1.0.1.0-linux.tar.gz -C /root/SAPMasternodeSetup/methuselah-1.0.1.0-linux
+ sudo  sudo tar -xf methuselah-1.0.1.0-linux.tar.gz -C ~/SAPMasternodeSetup/methuselah-1.0.1.0-linux
  sudo rm methuselah-1.0.1.0-linux.tar.gz
  
  stop_daemon
