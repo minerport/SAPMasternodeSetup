@@ -1,5 +1,5 @@
 #!/bin/bash
-# METHUSELAH Masternode Setup Script V1.4 for Ubuntu 16.04 LTS
+# METHUSELAH Masternode Setup Script V1.4 for Ubuntu 16.05 LTS
 # (c) 2018 by Dwigt007 for Methuselah
 #
 # Script will attempt to autodetect primary public IP address
@@ -50,6 +50,16 @@ function stop_daemon {
     fi
 }
 
+#Function detect_ubuntu
+
+ if [[ $(lsb_release -d) == *16.04* ]]; then
+   UBUNTU_VERSION=16
+else
+   echo -e "${RED}You are not running Ubuntu 14.04 or 16.04 Installation is cancelled.${NC}"
+   exit 1
+
+fi
+
 #Process command line parameters
 genkey=$1
 
@@ -95,10 +105,25 @@ MMMMMMMMMMMMMMMMMMMNKxl;'.                      .':okKWMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMWNKOxoc::;,''..'',;:cloxOKNWMMMMMMMMMMMMMMMMMMMMMMMM
 MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMWNNXXXXXXNWWMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
 "
-delay 5
-echo -e "${YELLOW}METHUSELAH Masternode Setup Script V1.4 for Ubuntu 16.04 LTS${NC}"
-echo -e "${GREEN}Updating system and installing required packages...${NC}"
-sudo DEBIAN_FRONTEND=noninteractive apt-get update -y
+sleep 5
+clear
+
+echo -e "${YELLOW}METHUSELAH Masternode Setup Script V1.5 for Ubuntu 16.04 LTS${NC}"
+echo "Do you want me to generate a masternode private key for you? [y/n]"
+  read DOSETUP
+if [[ $DOSETUP =~ "n" ]] ; then
+          read -e -p "Enter your private key:" genkey;
+              read -e -p "Confirm your private key: " genkey2;
+fi
+
+#Confirming match
+  if [ $genkey = $genkey2 ]; then
+     echo -e "${GREEN}MATCH! ${NC} \a" 
+else 
+     echo -e "${RED} Error: Private keys do not match. Try again or let me generate one for you...${NC} \a";exit 1
+fi
+sleep .5
+clear
 
 # Determine primary public IP address
 dpkg -s dnsutils 2>/dev/null >/dev/null || sudo apt-get -y install dnsutils
@@ -116,9 +141,11 @@ else
     fi
 fi
 
-#Killing running daemon
-pkill ./methuselahd
-
+echo -e "Do you want to install all needed dependencies (If you dont know what this is, press yes!)? [y/n]"
+read DOSETUP2
+if [[ $DOSETUP2 =~ "y" ]] ; then
+echo -e "${GREEN}Updating system and installing required packages...${NC}"
+sudo DEBIAN_FRONTEND=noninteractive apt-get update -y
 # update packages and upgrade Ubuntu
 sudo apt-get -y upgrade
 sudo apt-get -y autoremove
@@ -126,20 +153,17 @@ sudo apt-get -y install wget nano htop jq
 sudo apt-get -y install libzmq3-dev
 sudo apt-get -y install libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev
 sudo apt-get -y install libevent-dev
-
 sudo apt -y install software-properties-common
 sudo add-apt-repository ppa:bitcoin/bitcoin -y
 sudo apt-get -y update
 sudo apt-get -y install libdb4.8-dev libdb4.8++-dev
-
 sudo apt-get -y install libminiupnpc-dev
-
 sudo apt-get -y install fail2ban
 sudo service fail2ban restart
+fi
 
 sudo apt-get install ufw -y
 sudo apt-get update -y
-
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
 sudo ufw allow ssh
